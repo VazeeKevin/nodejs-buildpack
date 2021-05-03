@@ -138,3 +138,18 @@ install_npm() {
     echo "npm $version installed"
   fi
 }
+
+install_mysql() {
+  local dir="$1"
+
+  echo "Installing mysql binary"
+  wget -nv https://raw.githubusercontent.com/gaumire/mysql-binary/master/mysql.tar.gz 2>&1
+  mkdir -p "$dir/mysql"
+  tar -C "$dir/mysql" -xvf mysql.tar.gz
+  chmod +x "$dir"/mysql/bin/*
+
+  cat > $BUILD_DIR/.profile.d/mysql.sh <<EOF
+export PATH=$PATH:/app/mysql/bin
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/app/mysql/lib
+EOF
+}
